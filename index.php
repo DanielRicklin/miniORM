@@ -11,7 +11,7 @@ use \connection\ConnectionFactory as Connection;
 
 $connection = new Connection();
 $config=parse_ini_file('conf/config.ini');
-$connection->makeConnection($config);
+$connection::makeConnection($config);
 
 /*$query = new Query();
 $req = $query::table('article')->where('nom', '=', 'velo')->delete();

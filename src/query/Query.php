@@ -32,18 +32,16 @@ class Query {
 
         if(!is_null($this->where)){
 
-            $this->where .= ' AND '.$col.' '.$op.' ? ';
-            $this->args[] = $val;
-
+			$this->where .= " AND $col $op ? ";
+			
         } else {
 
-            $this->args[] = $val;
-            $this->where = $col.' '.$op.' ?';
-
-        }
-
+			$this->where = "WHERE $col $op ?";
+			
+		}
+		
+        $this->args[] = $val;
         return $this;
-
     }
 
     public function get(){
@@ -51,7 +49,7 @@ class Query {
 
         if(isset($this->where)){
 
-            $this->sql = 'SELECT '. $this->fields . ' FROM '. $this->sqlTable.' WHERE '.$this->where;
+            $this->sql = 'SELECT '. $this->fields . ' FROM '. $this->sqlTable.' '.$this->where;
 
         } else {
 
@@ -60,9 +58,9 @@ class Query {
         }
 
 		$pdo = ConnectionFactory::getConnection();
-		$rq = $pdo->prepare($this->sql);
-		$rq->execute($this->args);
-        return $rq->fetchAll(\PDO::FETCH_ASSOC);
+		$stmt = $pdo->prepare($this->sql);
+		$stmt->execute($this->args);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
     }
 
@@ -70,11 +68,11 @@ class Query {
 
         if(!is_null($this->where)){
 
-            $this->sql = 'DELETE FROM '. $this->sqlTable .' WHERE '.$this->where;
+            $this->sql = 'DELETE FROM '. $this->sqlTable .' '.$this->where;
 
             $pdo = connectionFactory::getConnection();
-            $rq = $pdo->prepare($this->sql);
-            $rq->execute($this->args);
+            $stmt = $pdo->prepare($this->sql);
+            $stmt->execute($this->args);
 
         }
 
@@ -98,7 +96,7 @@ class Query {
 		return (int)$pdo->lastInsertId($this->sqlTable);
 	}
 
-   public function update($tab){
+   /*public function update($tab){
 
        $tabKey = array();
        $tabValue = array();
@@ -114,11 +112,11 @@ class Query {
        $tabReverse = array_reverse($this->args);
 
        $set = implode(',',$tabKey);
-       $this->sql = 'UPDATE '.$this->sqlTable.' SET '.$set.' WHERE '.$this->where;
+       $this->sql = 'UPDATE '.$this->sqlTable.' SET '.$set.' '.$this->where;
 
       $pdo = connectionFactory::getConnection();
-       $rq = $pdo->prepare($this->sql);
-       $rq->execute($tabReverse);
+       $stmt = $pdo->prepare($this->sql);
+       $stmt->execute($tabReverse);
 
-   }
+   }*/
 }
