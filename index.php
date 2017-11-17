@@ -29,6 +29,9 @@ $article->descr = "pathfinder edition gggcollector golden remasterised signed";
 $article->tarif = 5979.99;
 $article->id_categ = 1;
 $article->insert();
+
+$article = new article();
+$article=$article::first(107);
 $article->delete();*/
 
 

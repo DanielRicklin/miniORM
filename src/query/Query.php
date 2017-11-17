@@ -65,19 +65,10 @@ class Query {
     }
 
     public function delete(){
-
-        if(!is_null($this->where)){
-
-            $this->sql = 'DELETE FROM '. $this->sqlTable .' '.$this->where;
-
-            $pdo = connectionFactory::getConnection();
-            $stmt = $pdo->prepare($this->sql);
-            $stmt->execute($this->args);
-
-        }
-
-
-
+		$pdo = connectionFactory::getConnection();
+		$this->sql = 'DELETE FROM '. $this->sqlTable .' '.$this->where;
+        $stmt = $pdo->prepare($this->sql);
+        $stmt->execute($this->args);
 	}
 
 	public function insert(array $t) {
